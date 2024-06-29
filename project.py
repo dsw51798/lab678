@@ -44,6 +44,15 @@ def load_yaml(path):
         return
 
 
+def save_yaml(data, path):
+    try:
+        with open(path, 'w') as f:
+            yaml.safe_dump(data, f, default_flow_style=False)
+            print(f"Dane pomyślnie zapisane do {path}.")
+    except Exception as error:
+        print("Wystąpił bład: " + error)
+
+
 def main():
     parser = argparse.ArgumentParser(prog="Konwersja plików",
                                      description="Skrypt do konwersji plików .xml .json i .yml pomiędzy formatami")
@@ -60,6 +69,8 @@ def main():
     if data:
         if args.output_file.endswith('.json'):
             save_json(data, args.output_file)
+        elif args.output_file.endswith(('.yml', '.yaml')):
+            save_yaml(data, args.output_file)
     else:
         print("Operacja zakończona niepowodzeniem.")
 
