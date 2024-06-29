@@ -53,6 +53,7 @@ def save_yaml(data, path):
     except Exception as error:
         print("Wystąpił bład: " + error)
 
+
 def load_xml(path):
     try:
         with open(path, 'r') as f:
@@ -69,6 +70,15 @@ def load_xml(path):
         return
 
 
+def save_xml(data, path):
+    try:
+        with open(path, 'w') as f:
+            xml_data = xmltodict.unparse(data, pretty=True)
+            print(f"Dane pomyślnie zapisane do {path}.")
+    except Exception as error:
+        print("Wystąpił bład: " + error)
+
+
 def main():
     parser = argparse.ArgumentParser(prog="Konwersja plików",
                                      description="Skrypt do konwersji plików .xml .json i .yml pomiędzy formatami")
@@ -83,12 +93,18 @@ def main():
         data = load_yaml(args.input_file)
     elif args.input_file.endswith('.xml'):
         data = load_xml(args.input_file)
+    else:
+        print("Podany format pliku wejścia nie jest obsługiwany.")
 
     if data:
         if args.output_file.endswith('.json'):
             save_json(data, args.output_file)
         elif args.output_file.endswith(('.yml', '.yaml')):
             save_yaml(data, args.output_file)
+        elif args.output_file.endswith('.xml'):
+            save_xml(data, args.output_file)
+        else:
+            print("Podany format pliku wejścia nie jest obsługiwany.")
     else:
         print("Operacja zakończona niepowodzeniem.")
 
