@@ -15,6 +15,7 @@ def load_json(path):
         return
     except FileNotFoundError as error:
         print("Nie znaleziono danego pliku: " + error)
+        return
 
 
 def main():
