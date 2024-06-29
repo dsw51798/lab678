@@ -1,6 +1,7 @@
 import argparse
 import json
 import yaml
+import xmltodict
 
 
 def load_json(path):
@@ -52,6 +53,21 @@ def save_yaml(data, path):
     except Exception as error:
         print("Wystąpił bład: " + error)
 
+def load_xml(path):
+    try:
+        with open(path, 'r') as f:
+            data = xmltodict.parse(f.read())
+            return data
+    except xmltodict.expat.ExpatError as error:
+        print("Składnia pliku nie jest poprawna: " + error)
+        return
+    except Exception as error:
+        print("Wystąpił błąd: " + error)
+        return
+    except FileNotFoundError as error:
+        print("Nie znaleziono danego pliku: " + error)
+        return
+
 
 def main():
     parser = argparse.ArgumentParser(prog="Konwersja plików",
@@ -65,6 +81,8 @@ def main():
         data = load_json(args.input_file)
     elif args.input_file.endswith(('.yml', '.yaml')):
         data = load_yaml(args.input_file)
+    elif args.input_file.endswith('.xml'):
+        data = load_xml(args.input_file)
 
     if data:
         if args.output_file.endswith('.json'):
