@@ -1,0 +1,39 @@
+name: Build and Upload EXE
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  push:
+    branches:
+      - merge-all
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        .\installResources.ps1
+
+    - name: Build EXE using PyInstaller
+      run: |
+        pip install pyinstaller
+        pyinstaller --onefile project.py
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: Built-EXE
+        path: dist/project.exe
