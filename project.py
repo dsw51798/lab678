@@ -18,6 +18,15 @@ def load_json(path):
         return
 
 
+def save_json(data, path):
+    try:
+        with open(path, 'w') as f:
+            json.dump(data, f, indent=4)
+            print(f"Dane pomyślnie zapisane do {path}.")
+    except Exception as error:
+        print("Wystąpił bład: " + error)
+
+
 def main():
     parser = argparse.ArgumentParser(prog="Konwersja plików",
                                      description="Skrypt do konwersji plików .xml .json i .yml pomiędzy formatami")
